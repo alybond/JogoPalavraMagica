@@ -1,0 +1,26 @@
+CINDERELA;Perdeu o sapato de cristal no baile;2
+BELLA;Gosta de ler e ama uma fera gentil;2
+ARIEL;Princesa do mar com cabelo vermelho;2
+AURORA;Dormiu muito tempo por um feitiço;2
+BRANCA;Comeu uma maca envenenada;2
+TIANA;Fez amizade com um sapo;2
+MERIDA;Menina ruiva que usa arco e flecha;2
+JASMINE;Princesa que anda de tapete magico;2
+RAPUNZEL;Tem um cabelo muito comprido;2
+ELSA;Tem poderes de gelo;2
+ANNA;Irmã corajosa da Elsa;2
+MOANA;Ama o mar e viaja com o Maui;2
+BELA;Ama livros e é muito gentil;2
+FADA;Tem asas e poeira magica;2
+VARINHA;Usada para fazer magia;2
+COROA;Brilha na cabeca da princesa;2
+CASTELO;Casa grande e encantada;2
+SAPATO;De cristal, combina com a princesa;2
+MAGIA;Faz tudo ficar encantado;2
+SEREIA;Vive no mar e canta bonito;2
+VESTIDO;Roupa linda de festa da princesa;2
+PRINCIPE;Amigo corajoso da princesa;2
+REINO;Lugar onde mora a familia real;2
+CARROSA;Leva a princesa ao baile;2
+FLOR;Linda e perfumada do jardim real;2
+AMIGA;Toda princesa tem uma amiga leal;2
