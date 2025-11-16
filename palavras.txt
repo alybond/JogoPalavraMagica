@@ -1,11 +1,52 @@
 PRINCESA;CINDERELA;Perdeu o sapato no baile.;FACIL;2;60;8
 PRINCESA;ARIEL;Vive no fundo do mar.;MEDIO;1;45;7
 PRINCESA;MULAN;Guerreira corajosa que luta pela família.;DIFICIL;1;40;6
+PRINCESA;RAPUNZEL;Princesa da torre com cabelo enorme.;FACIL;2;60;8
+PRINCESA;BRANCADENEVE;Amiga dos sete aneis.;MEDIO;1;50;7
+PRINCESA;AURORA;Princesa que dormiu muito tempo.;FACIL;2;60;8
+PRINCESA;BELLE;Ama livros e vive com uma fera.;MEDIO;1;45;7
+PRINCESA;TIANA;Trabalha duro e sonha com restaurante.;MEDIO;1;50;7
+PRINCESA;ELSA;Tem poderes de gelo.;FACIL;2;60;8
+PRINCESA;ANNA;Irma da rainha Elsa.;FACIL;2;60;8
+PRINCESA;MERIDA;Princesa arqueira de cabelos ruivos.;MEDIO;1;45;7
+PRINCESA;MOANA;Aventureira do oceano.;MEDIO;1;45;7
+PRINCESA;POCAHONTAS;Ama a natureza e os animais.;DIFICIL;1;40;6
+PRINCESA;JASMINE;Princesa amiga do Aladdin.;FACIL;2;60;8
 
-ANIMAL;GATO;Animal doméstico que mia.;FACIL;2;60;8
-ANIMAL;ELEFANTE;Maior animal terrestre com tromba.;MEDIO;1;45;7
-ANIMAL;BORBOLETA;Inseto colorido que nasce da lagarta.;DIFICIL;1;40;6
 
-AVENTURA;TESOURO;Objetivo dos piratas.;FACIL;2;60;8
+ANIMAL;ELEFANTE;Animal enorme com tromba.;MEDIO;1;45;7
+ANIMAL;GIRAFA;Animal de pescoco comprido.;FACIL;2;60;8
+ANIMAL;LEAO;Rei da selva.;FACIL;2;60;8
+ANIMAL;TIGRE;Gato selvagem listrado.;MEDIO;1;50;7
+ANIMAL;COELHO;Corre rapido e come cenoura.;FACIL;2;60;8
+ANIMAL;GATO;Animal de estimacao que mia.;FACIL;2;60;8
+ANIMAL;CACHORRO;Melhor amigo do homem.;FACIL;2;60;8
+ANIMAL;BORBOLETA;Inseto com asas coloridas.;MEDIO;1;45;7
+ANIMAL;TARTARUGA;Animal lento com casco.;FACIL;2;60;8
+ANIMAL;RAPOSA;Astuta e ruiva.;MEDIO;1;45;7
+ANIMAL;PINGUIM;Animal que vive no gelo.;MEDIO;1;45;7
+ANIMAL;CORUJA;Animal que enxerga no escuro.;MEDIO;1;50;7
+ANIMAL;CAVALO;Corre rapido e forte.;FACIL;2;60;8
+ANIMAL;LOBO;Animal selvagem em alcateia.;MEDIO;1;45;7
+ANIMAL;FALCAO;Ave que voa rapido.;DIFICIL;1;40;6
+
+
+AVENTURA;TESOURO;O que os piratas procuram.;FACIL;2;60;8
 AVENTURA;DRAGAO;Criatura que cospe fogo.;MEDIO;1;45;7
-AVENTURA;CAVERNA;Ambiente escuro e misterioso.;DIFICIL;1;40;6
+AVENTURA;ESPADA;Arma usada por guerreiros.;FACIL;2;60;8
+AVENTURA;CAVERNA;Lugar escuro e misterioso.;MEDIO;1;50;7
+AVENTURA;MAPA;Mostra o caminho secreto.;FACIL;2;60;8
+AVENTURA;FLORESTA;Cheia de arvores e segredos.;FACIL;2;60;8
+AVENTURA;REINO;Territorio de reis e criaturas.;MEDIO;1;50;7
+AVENTURA;PORTAL;Abre passagem para outro mundo.;MEDIO;1;45;7
+AVENTURA;MAGO;Tem poderes e sabedoria.;FACIL;2;60;8
+AVENTURA;MISSAO;A tarefa principal do heroi.;MEDIO;1;45;7
+AVENTURA;GUERREIRO;Luta com coragem e honra.;MEDIO;1;50;7
+AVENTURA;CORAGEM;Necessaria para enfrentar desafios.;FACIL;2;60;8
+AVENTURA;MONTANHA;Gigante e perigosa.;MEDIO;1;45;7
+AVENTURA;TUNEL;Caminho subterraneo.;MEDIO;1;45;7
+AVENTURA;LABIRINTO;Caminho cheio de voltas e confusao.;DIFICIL;1;40;6
+AVENTURA;ENIGMA;Desafio que precisa ser decifrado.;DIFICIL;1;40;6
+
+
+
