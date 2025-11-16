@@ -1,65 +1,48 @@
 #ifndef JOGO_H
 #define JOGO_H
 
-#include <stdbool.h>
-#include <time.h>
+// Arquivos usados pelo jogo
+#define ARQUIVO_PALAVRAS "palavras.txt"
+#define ARQUIVO_RANKING  "ranking.txt"
 
-#define MAX_PALAVRA 64
-#define MAX_DICA    128
-#define MAX_LINHA   256
-#define MAX_LISTA   512
+// Limites
+#define MAX_PALAVRAS   200
+#define MAX_TEMA       20
+#define MAX_PALAVRA    32
+#define MAX_DICA       200
+#define MAX_NIVEL      10
 
-typedef enum {
-    NIVEL_FACIL = 1,
-    NIVEL_MEDIO = 2,
-    NIVEL_DIFICIL = 3
-} Dificuldade;
-
-typedef enum {
-    TEMA_PRINCESAS = 1,
-    TEMA_AVENTURAS = 2
-} Tema;
-
+// Estrutura que representa uma palavra do jogo
 typedef struct {
-    char palavra[MAX_PALAVRA]; // ex: "CINDERELA" (sem acento)
-    char dica[MAX_DICA];       // ex: "Perdeu o sapato no baile"
-    int  visiveis;             // quantas letras já começam reveladas
-} Entrada;
+    char tema[MAX_TEMA];       // PRINCESA / ANIMAL / AVENTURA
+    char palavra[MAX_PALAVRA]; // ex: CINDERELA
+    char dica[MAX_DICA];       // frase de dica
+    char nivel[MAX_NIVEL];     // FACIL / MEDIO / DIFICIL
+    int letrasVisiveis;        // quantas letras aparecem no inicio
+    int tempoMax;              // tempo maximo (segundos)
+    int tentativasMax;         // tentativas maximas
+} Palavra;
 
-typedef struct {
-    Entrada atual;
-    char exibida[MAX_PALAVRA];
-    int tentativas_restantes;
-    int pontuacao;
-    int letras_reveladas;
-    bool venceu;
+// Funções utilitárias
+void limparTela();
+void pausar();
 
-    // controle
-    int usadas[26];            // letras já tentadas (A..Z)
-    Dificuldade nivel;         // fácil/médio/difícil
-    int tempo_limite_seg;      // 0 = sem tempo
-    time_t inicio;             // início da partida
-    Tema tema;                 // princesas/aventuras
+// Funções de carregamento e filtro
+int carregarPalavras(const char *nomeArquivo, Palavra vetor[], int *qtdTotal);
+int filtrarPorTema(const Palavra origem[], int qtdOrigem, const char *tema,
+                   Palavra destino[], int *qtdDestino);
+int sortearIndice(int limite);
 
-    // contadores exigidos
-    int acertos_total;         // ocorrências reveladas por chutes
-    int erros_total;           // chutes sem ocorrência
-} Jogo;
+// Funções de interface
+void exibirTitulo();
+void exibirMenuPrincipal();
+void exibirComoJogar();
+void exibirRanking();
 
-// === API base ===
-int  carregar_palavras(const char *caminho, Entrada lista[], int max);
-void escolher_aleatoria(Entrada lista[], int qtd, Entrada *saida);
-void iniciar_jogo(Jogo *j, const Entrada *e, int tentativas);
-bool terminou(const Jogo *j);
-void desenhar(const Jogo *j);
-void normalizar_maiusculas(char *s);
+// Funções de ranking
+void registrarRanking(const char *nomeJogador, const Palavra *p, int pontuacao, int tempoGasto);
 
-// === novas APIs ===
-void configurar_dificuldade(Jogo *j, Dificuldade nivel);
-void configurar_tema(Jogo *j, Tema tema);
-void iniciar_cronometro(Jogo *j);
-int  tempo_restante(const Jogo *j); // em segundos (0 quando acabou)
-int  tentar_letra(Jogo *j, char letra, int *ocorrencias, int *repetida); // 1 = letra válida
-void mostrar_regras(void);
+// Lógica principal de um jogo
+void jogarPartida(const Palavra *p);
 
-#endif
+#endif // JOGO_H

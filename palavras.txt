@@ -1,0 +1,11 @@
+PRINCESA;CINDERELA;Perdeu o sapato no baile.;FACIL;2;60;8
+PRINCESA;ARIEL;Vive no fundo do mar.;MEDIO;1;45;7
+PRINCESA;MULAN;Guerreira corajosa que luta pela família.;DIFICIL;1;40;6
+
+ANIMAL;GATO;Animal doméstico que mia.;FACIL;2;60;8
+ANIMAL;ELEFANTE;Maior animal terrestre com tromba.;MEDIO;1;45;7
+ANIMAL;BORBOLETA;Inseto colorido que nasce da lagarta.;DIFICIL;1;40;6
+
+AVENTURA;TESOURO;Objetivo dos piratas.;FACIL;2;60;8
+AVENTURA;DRAGAO;Criatura que cospe fogo.;MEDIO;1;45;7
+AVENTURA;CAVERNA;Ambiente escuro e misterioso.;DIFICIL;1;40;6
