@@ -1,48 +1,50 @@
 #ifndef JOGO_H
 #define JOGO_H
 
-// Arquivos usados pelo jogo
+// arquivos usados pelo jogo
 #define ARQUIVO_PALAVRAS "palavras.txt"
 #define ARQUIVO_RANKING  "ranking.txt"
 
-// Limites
-#define MAX_PALAVRAS   200
-#define MAX_TEMA       20
-#define MAX_PALAVRA    32
-#define MAX_DICA       200
-#define MAX_NIVEL      10
+// limites de tamanho e quantidade
+#define MAX_PALAVRAS   200   // quantidade maxima de palavras no jogo
+#define MAX_TEMA       20    // tamanho maximo do texto do tema
+#define MAX_PALAVRA    32    // tamanho maximo da palavra secreta
+#define MAX_DICA       200   // tamanho maximo da dica
+#define MAX_NIVEL      10    // tamanho maximo do nivel
 
-// Estrutura que representa uma palavra do jogo
+// estrutura que representa uma palavra do jogo
 typedef struct {
-    char tema[MAX_TEMA];       // PRINCESA / ANIMAL / AVENTURA
-    char palavra[MAX_PALAVRA]; // ex: CINDERELA
-    char dica[MAX_DICA];       // frase de dica
-    char nivel[MAX_NIVEL];     // FACIL / MEDIO / DIFICIL
-    int letrasVisiveis;        // quantas letras aparecem no inicio
-    int tempoMax;              // tempo maximo (segundos)
-    int tentativasMax;         // tentativas maximas
+    char tema[MAX_TEMA];       // texto do tema )
+    char palavra[MAX_PALAVRA]; // texto da palavra secreta (ex: cinderela)
+    char dica[MAX_DICA];       // texto da dica da palavra
+    char nivel[MAX_NIVEL];     // nivel de dificuldade (ex: facil / medio / dificil)
+    int letrasVisiveis;        // quantidade de letras mostradas no inicio como dica
+    int tempoMax;              // tempo maximo para descobrir a palavra em segundos
+    int tentativasMax;         // numero maximo de tentativas de letra
 } Palavra;
 
-// Funções utilitárias
-void limparTela();
-void pausar();
+// funcoes simples de interface com o usuario
+void limparTela();  // limpa o texto da tela
+void pausar();      // espera o usuario apertar enter
 
-// Funções de carregamento e filtro
+// funcoes para carregar e filtrar palavras do arquivo
 int carregarPalavras(const char *nomeArquivo, Palavra vetor[], int *qtdTotal);
+// filtra palavras por tema e salva em outro vetor
 int filtrarPorTema(const Palavra origem[], int qtdOrigem, const char *tema,
                    Palavra destino[], int *qtdDestino);
+// sorteia um indice aleatorio de 0 ate limite - 1
 int sortearIndice(int limite);
 
-// Funções de interface
-void exibirTitulo();
-void exibirMenuPrincipal();
-void exibirComoJogar();
-void exibirRanking();
+// funcoes de interface de menu e explicacoes
+void exibirTitulo();         // mostra o titulo do jogo
+void exibirMenuPrincipal();  // mostra o menu principal com os temas
+void exibirComoJogar();      // mostra instrucoes de como jogar
+void exibirRanking();        // mostra o ranking salvo no arquivo
 
-// Funções de ranking
+// funcoes para gravar e controlar o ranking
 void registrarRanking(const char *nomeJogador, const Palavra *p, int pontuacao, int tempoGasto);
 
-// Lógica principal de um jogo
+// logica principal de uma partida do jogo com uma palavra
 void jogarPartida(const Palavra *p);
 
 #endif // JOGO_H
