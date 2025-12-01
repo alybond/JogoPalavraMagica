@@ -5,8 +5,9 @@
 #include <time.h>
 #include "jogo.h"
 
-/* =================== FUNÇÕES DE UTILIDADE =================== */
+/* =================== funcoes de utilidade =================== */
 
+// funcao para limpar a tela
 void limparTela() {
 #ifdef _WIN32
     system("cls");
@@ -15,12 +16,51 @@ void limparTela() {
 #endif
 }
 
+// chama o executavel da interface C# passando um comando
+static void abrirInterface(const char *comando) {
+#ifdef _WIN32
+    char cmd[512];
+    // ajuste o caminho se o seu FormInterface gerar em outra pasta
+    snprintf(
+        cmd,
+        sizeof(cmd),
+        "start \"\" \"FormInterface\\bin\\Debug\\net8.0-windows\\FormInterface.exe\" %s",
+        comando
+    );
+    system(cmd);
+#else
+    (void)comando;
+#endif
+}
+
+// mostra a imagem do tema via FormInterface
+void mostrarInterfaceTema(const Palavra *p) {
+    abrirInterface(p->tema);  // PRINCESA / ANIMAL / AVENTURA
+}
+
+void mostrarInterfaceAcerto() {
+    abrirInterface("acerto");
+}
+
+void mostrarInterfaceErro() {
+    abrirInterface("erro");
+}
+
+void mostrarInterfaceParabens() {
+    abrirInterface("parabens");
+}
+
+void mostrarInterfaceGameOver() {
+    abrirInterface("gameover");
+}
+
+// pausa ate ENTER
 void pausar() {
     printf("\nPressione ENTER para continuar...");
     getchar();
 }
 
-// transforma string em maiúsculas
+// converte string para maiusculas
 static void strToUpper(char *s) {
     while (*s) {
         *s = (char)toupper((unsigned char)*s);
@@ -28,7 +68,7 @@ static void strToUpper(char *s) {
     }
 }
 
-// remove \n do final de string lida com fgets
+// remove \n do final de string
 static void removeQuebraLinha(char *s) {
     size_t len = strlen(s);
     if (len > 0 && (s[len - 1] == '\n' || s[len - 1] == '\r')) {
@@ -36,12 +76,15 @@ static void removeQuebraLinha(char *s) {
     }
 }
 
-/* =================== CARREGAMENTO DE DADOS =================== */
+/* =================== carregamento de dados =================== */
 
 int carregarPalavras(const char *nomeArquivo, Palavra vetor[], int *qtdTotal) {
-    FILE *f = fopen(nomeArquivo, "r");
+    FILE *f;
     char linha[512];
-    int contador = 0;
+    int contador;
+
+    f = fopen(nomeArquivo, "r");
+    contador = 0;
 
     if (!f) {
         printf("Erro ao abrir o arquivo de palavras (%s).\n", nomeArquivo);
@@ -49,8 +92,9 @@ int carregarPalavras(const char *nomeArquivo, Palavra vetor[], int *qtdTotal) {
     }
 
     while (fgets(linha, sizeof(linha), f) != NULL && contador < MAX_PALAVRAS) {
-        if (linha[0] == '\n' || linha[0] == '\0')
-            continue; // linha vazia
+        if (linha[0] == '\n' || linha[0] == '\0') {
+            continue;
+        }
 
         Palavra p;
         char *token;
@@ -87,12 +131,12 @@ int carregarPalavras(const char *nomeArquivo, Palavra vetor[], int *qtdTotal) {
         if (!token) continue;
         p.tentativasMax = atoi(token);
 
-        // normalizar em maiúsculas
         strToUpper(p.tema);
         strToUpper(p.palavra);
         strToUpper(p.nivel);
 
-        vetor[contador++] = p;
+        vetor[contador] = p;
+        contador++;
     }
 
     fclose(f);
@@ -108,11 +152,13 @@ int carregarPalavras(const char *nomeArquivo, Palavra vetor[], int *qtdTotal) {
 
 int filtrarPorTema(const Palavra origem[], int qtdOrigem, const char *tema,
                    Palavra destino[], int *qtdDestino) {
-    int i, j = 0;
+    int i;
+    int j = 0;
 
     for (i = 0; i < qtdOrigem; i++) {
         if (strcmp(origem[i].tema, tema) == 0) {
-            destino[j++] = origem[i];
+            destino[j] = origem[i];
+            j++;
         }
     }
 
@@ -125,7 +171,7 @@ int sortearIndice(int limite) {
     return rand() % limite;
 }
 
-/* =================== INTERFACE (TEXTO) =================== */
+/* =================== interface de texto =================== */
 
 void exibirTitulo() {
     printf("\n");
@@ -135,15 +181,12 @@ void exibirTitulo() {
     printf("   .          O jogo das palavras      *\n");
     printf("           *       .     *       .        \n");
     printf("    *       .          .                 .       *  \n");
-
-
- 
- 
     printf("\n");
 }
 
 void exibirMenuPrincipal() {
     exibirTitulo();
+
     printf("Escolha um tema:\n\n");
     printf("  1) Princesas\n");
     printf("  2) Aventura\n");
@@ -157,6 +200,7 @@ void exibirMenuPrincipal() {
 void exibirComoJogar() {
     limparTela();
     exibirTitulo();
+
     printf("COMO JOGAR: \n");
     printf("- Escolha um tema (Princesas, Aventura ou Animais).\n");
     printf("- O jogo sorteia uma palavra secreta desse tema.\n");
@@ -165,38 +209,35 @@ void exibirComoJogar() {
     printf("- Cada letra correta vale pontos, cada erro custa tentativas.\n");
     printf("- Ha um limite de tempo e de tentativas.\n");
     printf("- Se voce descobrir a palavra antes do tempo acabar, vence a partida.\n");
+
     pausar();
 }
 
-/* =================== RANKING =================== */
+/* =================== ranking =================== */
 
 void registrarRanking(const char *nomeJogador, const Palavra *p, int pontuacao, int tempoGasto) {
     FILE *f = fopen(ARQUIVO_RANKING, "a");
-
     if (!f) {
         printf("Nao foi possivel registrar ranking.\n");
         return;
     }
 
     fprintf(f, "%s;%s;%s;%d;%d\n",
-            nomeJogador,
-            p->tema,
-            p->palavra,
-            pontuacao,
-            tempoGasto);
+            nomeJogador, p->tema, p->palavra, pontuacao, tempoGasto);
 
     fclose(f);
 }
 
 void exibirRanking() {
-    FILE *f = fopen(ARQUIVO_RANKING, "r");
+    FILE *f;
     char linha[256];
-    int pos = 1;
+    int pos;
 
     limparTela();
     exibirTitulo();
     printf("RANKING\n\n");
 
+    f = fopen(ARQUIVO_RANKING, "r");
     if (!f) {
         printf("Nenhum registro de ranking encontrado ainda.\n\n");
         pausar();
@@ -207,10 +248,15 @@ void exibirRanking() {
            "Nome", "Tema", "Palavra", "Pontos", "Tempo");
     printf("---------------------------------------------------------------\n");
 
+    pos = 1;
+
     while (fgets(linha, sizeof(linha), f) != NULL) {
         char *token;
-        char nome[50], tema[20], palavra[32];
-        int pontos, tempo;
+        char nome[50];
+        char tema[20];
+        char palavra[32];
+        int pontos;
+        int tempo;
 
         token = strtok(linha, ";\n\r");
         if (!token) continue;
@@ -237,6 +283,7 @@ void exibirRanking() {
 
         printf("%2d  %-15s %-10s %-12s %-8d %-8d\n",
                pos, nome, tema, palavra, pontos, tempo);
+
         pos++;
     }
 
@@ -245,13 +292,14 @@ void exibirRanking() {
     pausar();
 }
 
-/* =================== LÓGICA DO JOGO =================== */
+/* =================== logica do jogo =================== */
 
 static void exibirLetrasUsadas(int usadas[26], int dicas[26]) {
     int i;
     int primeiro = 1;
 
     printf("Letras ja mostradas: ");
+
     for (i = 0; i < 26; i++) {
         if (usadas[i] || dicas[i]) {
             if (!primeiro) {
@@ -261,6 +309,7 @@ static void exibirLetrasUsadas(int usadas[26], int dicas[26]) {
             primeiro = 0;
         }
     }
+
     if (primeiro) {
         printf("nenhuma ainda");
     }
@@ -269,18 +318,33 @@ static void exibirLetrasUsadas(int usadas[26], int dicas[26]) {
 
 void jogarPartida(const Palavra *p) {
     int i;
-    int tamanho = (int)strlen(p->palavra);
+    int tamanho;
     char exibicao[MAX_PALAVRA];
-    int tentativasRestantes = p->tentativasMax;
-    int pontuacao = 0;
-    int letrasRestantes = 0;
-    int letrasJaVisiveis = p->letrasVisiveis;
-    int usadas[26] = {0};  // letras que o jogador tentou
-    int dicas[26]  = {0};  // letras reveladas como dica
-    time_t inicio, agora;
+    int tentativasRestantes;
+    int pontuacao;
+    int letrasRestantes;
+    int letrasJaVisiveis;
+    int usadas[26];
+    int dicas[26];
+    time_t inicio;
+    time_t agora;
     int tempoGasto;
 
-    // preparar exibicao: '_' para letras, ' ' para espaco
+    tamanho = (int)strlen(p->palavra);
+
+    // mostra imagem do tema no inicio
+    mostrarInterfaceTema(p);
+
+    tentativasRestantes = p->tentativasMax;
+    pontuacao = 0;
+    letrasRestantes = 0;
+    letrasJaVisiveis = p->letrasVisiveis;
+
+    for (i = 0; i < 26; i++) {
+        usadas[i] = 0;
+        dicas[i] = 0;
+    }
+
     for (i = 0; i < tamanho; i++) {
         if (p->palavra[i] == ' ') {
             exibicao[i] = ' ';
@@ -290,16 +354,15 @@ void jogarPartida(const Palavra *p) {
     }
     exibicao[tamanho] = '\0';
 
-    // revelar letras visiveis iniciais (dica)
     if (letrasJaVisiveis > 0 && letrasJaVisiveis < tamanho) {
         int cont = 0;
         while (cont < letrasJaVisiveis) {
             int idx = rand() % tamanho;
+
             if (exibicao[idx] == '_' && p->palavra[idx] != ' ') {
                 exibicao[idx] = p->palavra[idx];
                 cont++;
 
-                // marca essa letra como "dica", NAO como usada
                 if (p->palavra[idx] >= 'A' && p->palavra[idx] <= 'Z') {
                     int li = p->palavra[idx] - 'A';
                     dicas[li] = 1;
@@ -308,11 +371,11 @@ void jogarPartida(const Palavra *p) {
         }
     }
 
-    // contar letras que ainda faltam
     letrasRestantes = 0;
     for (i = 0; i < tamanho; i++) {
-        if (exibicao[i] == '_')
+        if (exibicao[i] == '_') {
             letrasRestantes++;
+        }
     }
 
     time(&inicio);
@@ -332,10 +395,10 @@ void jogarPartida(const Palavra *p) {
                    p->nivel, p->tempoMax, p->tentativasMax);
             printf("DICA: %s\n\n", p->dica);
             printf("\nO tempo acabou!\n");
+            mostrarInterfaceGameOver();
             break;
         }
 
-        // limpa a tela a cada rodada e redesenha tudo
         limparTela();
         exibirTitulo();
         printf("TEMA: %s\n", p->tema);
@@ -357,15 +420,21 @@ void jogarPartida(const Palavra *p) {
         printf("Digite uma letra: ");
         if (scanf(" %c", &letra) != 1) {
             int ch;
-            while ((ch = getchar()) != '\n' && ch != EOF);
+            ch = getchar();
+            while (ch != '\n' && ch != EOF) {
+                ch = getchar();
+            }
             printf("Entrada invalida.\n");
             pausar();
             continue;
         }
-        // limpa qualquer resto da linha
+
         {
             int ch;
-            while ((ch = getchar()) != '\n' && ch != EOF);
+            ch = getchar();
+            while (ch != '\n' && ch != EOF) {
+                ch = getchar();
+            }
         }
 
         letra = (char)toupper((unsigned char)letra);
@@ -376,35 +445,36 @@ void jogarPartida(const Palavra *p) {
             continue;
         }
 
-        int indiceLetra = letra - 'A';
-
-        // agora, SÓ bloqueia se a letra ja foi TENTADA (usadas),
-        // letras apenas de dica (dicas[]) NAO bloqueiam
-        if (usadas[indiceLetra]) {
-            printf("Voce ja tentou a letra '%c'.\n", letra);
-            exibirLetrasUsadas(usadas, dicas);
-            pausar();
-            continue;
+        {
+            int indiceLetra = letra - 'A';
+            if (usadas[indiceLetra]) {
+                printf("Voce ja tentou a letra '%c'.\n", letra);
+                exibirLetrasUsadas(usadas, dicas);
+                pausar();
+                continue;
+            }
+            usadas[indiceLetra] = 1;
         }
 
-        // marca como tentativa
-        usadas[indiceLetra] = 1;
-
-        // verifica se a letra existe na palavra
         for (i = 0; i < tamanho; i++) {
             if (p->palavra[i] == letra && exibicao[i] == '_') {
                 exibicao[i] = letra;
                 acerto = 1;
                 pontuacao += 10;
-                letrasRestantes--;  // uma letra a menos para descobrir
+                letrasRestantes--;
             }
         }
 
         if (!acerto) {
             printf("\nEssa letra nao existe na palavra.\n");
+            mostrarInterfaceErro();
             pontuacao -= 5;
             if (pontuacao < 0) pontuacao = 0;
             tentativasRestantes--;
+            pausar();
+        } else {
+            printf("\nBoa! Voce acertou uma letra.\n");
+            mostrarInterfaceAcerto();
             pausar();
         }
     }
@@ -412,7 +482,6 @@ void jogarPartida(const Palavra *p) {
     time(&agora);
     tempoGasto = (int)difftime(agora, inicio);
 
-    // tela final limpa
     limparTela();
     exibirTitulo();
     printf("TEMA: %s\n", p->tema);
@@ -434,25 +503,30 @@ void jogarPartida(const Palavra *p) {
 
         printf("Pontuacao final: %d | Tempo utilizado: %ds\n", pontuacao, tempoGasto);
 
-        char nome[50];
-        printf("\nDigite seu nome para registrar no ranking (ou deixe vazio para pular): ");
-        if (fgets(nome, sizeof(nome), stdin) != NULL) {
-            removeQuebraLinha(nome);
-            if (strlen(nome) > 0) {
-                registrarRanking(nome, p, pontuacao, tempoGasto);
-                printf("Registro salvo!\n");
-            } else {
-                printf("Registro nao salvo.\n");
+        mostrarInterfaceParabens();
+
+        {
+            char nome[50];
+            printf("\nDigite seu nome para registrar no ranking (ou deixe vazio para pular): ");
+            if (fgets(nome, sizeof(nome), stdin) != NULL) {
+                removeQuebraLinha(nome);
+                if (strlen(nome) > 0) {
+                    registrarRanking(nome, p, pontuacao, tempoGasto);
+                    printf("Registro salvo!\n");
+                } else {
+                    printf("Registro nao salvo.\n");
+                }
             }
         }
     } else if (tentativasRestantes == 0) {
         printf("Suas tentativas acabaram.\n");
         printf("A palavra era: %s\n", p->palavra);
+        mostrarInterfaceGameOver();
     } else {
         printf("O tempo acabou.\n");
         printf("A palavra era: %s\n", p->palavra);
+        mostrarInterfaceGameOver();
     }
 
     pausar();
 }
-
