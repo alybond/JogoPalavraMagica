@@ -14,37 +14,42 @@
 
 // estrutura que representa uma palavra do jogo
 typedef struct {
-    char tema[MAX_TEMA];       // texto do tema )
-    char palavra[MAX_PALAVRA]; // texto da palavra secreta (ex: cinderela)
-    char dica[MAX_DICA];       // texto da dica da palavra
-    char nivel[MAX_NIVEL];     // nivel de dificuldade (ex: facil / medio / dificil)
-    int letrasVisiveis;        // quantidade de letras mostradas no inicio como dica
-    int tempoMax;              // tempo maximo para descobrir a palavra em segundos
-    int tentativasMax;         // numero maximo de tentativas de letra
+    char tema[MAX_TEMA];       // texto do tema (ex: PRINCESA)
+    char palavra[MAX_PALAVRA]; // palavra secreta (ex: CINDERELA)
+    char dica[MAX_DICA];       // dica da palavra
+    char nivel[MAX_NIVEL];     // FACIL / MEDIO / DIFICIL
+    int letrasVisiveis;        // letras mostradas no inicio
+    int tempoMax;              // tempo maximo em segundos
+    int tentativasMax;         // numero maximo de tentativas
 } Palavra;
 
 // funcoes simples de interface com o usuario
-void limparTela();  // limpa o texto da tela
-void pausar();      // espera o usuario apertar enter
+void limparTela();
+void pausar();
 
 // funcoes para carregar e filtrar palavras do arquivo
 int carregarPalavras(const char *nomeArquivo, Palavra vetor[], int *qtdTotal);
-// filtra palavras por tema e salva em outro vetor
 int filtrarPorTema(const Palavra origem[], int qtdOrigem, const char *tema,
                    Palavra destino[], int *qtdDestino);
-// sorteia um indice aleatorio de 0 ate limite - 1
 int sortearIndice(int limite);
 
-// funcoes de interface de menu e explicacoes
-void exibirTitulo();         // mostra o titulo do jogo
-void exibirMenuPrincipal();  // mostra o menu principal com os temas
-void exibirComoJogar();      // mostra instrucoes de como jogar
-void exibirRanking();        // mostra o ranking salvo no arquivo
+// interface de texto
+void exibirTitulo();
+void exibirMenuPrincipal();
+void exibirComoJogar();
+void exibirRanking();
 
-// funcoes para gravar e controlar o ranking
+// interface grafica (Windows Forms)
+void mostrarInterfaceTema(const Palavra *p);
+void mostrarInterfaceAcerto();
+void mostrarInterfaceErro();
+void mostrarInterfaceParabens();
+void mostrarInterfaceGameOver();
+
+// ranking
 void registrarRanking(const char *nomeJogador, const Palavra *p, int pontuacao, int tempoGasto);
 
-// logica principal de uma partida do jogo com uma palavra
+// logica do jogo
 void jogarPartida(const Palavra *p);
 
 #endif // JOGO_H
