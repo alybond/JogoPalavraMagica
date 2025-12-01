@@ -10,8 +10,10 @@ int main() {
     int opcao;
     int ok;
 
+    // semente do random
     srand((unsigned int)time(NULL));
 
+    // Carregar todas as palavras do arquivo
     ok = carregarPalavras(ARQUIVO_PALAVRAS, todasPalavras, &qtdTotal);
     if (!ok) {
         printf("Nao foi possivel iniciar o jogo sem palavras.\n");
@@ -26,17 +28,20 @@ int main() {
             while (getchar() != '\n');
             opcao = -1;
         }
-        while (getchar() != '\n');
+        while (getchar() != '\n'); // limpar buffer
 
         if (opcao == 1 || opcao == 2 || opcao == 3) {
             char temaEscolhido[MAX_TEMA];
             char nivelEscolhido[MAX_NIVEL];
             int opcaoNivel;
-            int filtraNivel = 1;
 
-            if (opcao == 1) strcpy(temaEscolhido, "PRINCESA");
-            else if (opcao == 2) strcpy(temaEscolhido, "AVENTURA");
-            else strcpy(temaEscolhido, "ANIMAL");
+            if (opcao == 1) {
+                strcpy(temaEscolhido, "PRINCESA");
+            } else if (opcao == 2) {
+                strcpy(temaEscolhido, "AVENTURA");
+            } else {
+                strcpy(temaEscolhido, "ANIMAL");
+            }
 
             printf("\nEscolha a dificuldade:\n\n");
             printf("  1) Facil\n");
@@ -49,22 +54,27 @@ int main() {
                 while (getchar() != '\n');
                 opcaoNivel = 4;
             }
-            while (getchar() != '\n');
+            while (getchar() != '\n'); // limpar buffer
 
-            if (opcaoNivel == 1) strcpy(nivelEscolhido, "FACIL");
-            else if (opcaoNivel == 2) strcpy(nivelEscolhido, "MEDIO");
-            else if (opcaoNivel == 3) strcpy(nivelEscolhido, "DIFICIL");
-            else filtraNivel = 0;
+            int filtrarPorNivel = 1;
+            if (opcaoNivel == 1) {
+                strcpy(nivelEscolhido, "FACIL");
+            } else if (opcaoNivel == 2) {
+                strcpy(nivelEscolhido, "MEDIO");
+            } else if (opcaoNivel == 3) {
+                strcpy(nivelEscolhido, "DIFICIL");
+            } else {
+                filtrarPorNivel = 0; // qualquer nivel
+            }
 
             Palavra filtradas[MAX_PALAVRAS];
             int qtdFiltradas = 0;
-            int i;
 
-            for (i = 0; i < qtdTotal; i++) {
+            // filtra por tema e, opcionalmente, por nivel
+            for (int i = 0; i < qtdTotal; i++) {
                 if (strcmp(todasPalavras[i].tema, temaEscolhido) == 0) {
-                    if (!filtraNivel || strcmp(todasPalavras[i].nivel, nivelEscolhido) == 0) {
-                        filtradas[qtdFiltradas] = todasPalavras[i];
-                        qtdFiltradas++;
+                    if (!filtrarPorNivel || strcmp(todasPalavras[i].nivel, nivelEscolhido) == 0) {
+                        filtradas[qtdFiltradas++] = todasPalavras[i];
                     }
                 }
             }
@@ -83,7 +93,6 @@ int main() {
             }
 
             jogarPartida(&filtradas[idx]);
-
         } else if (opcao == 4) {
             exibirComoJogar();
         } else if (opcao == 5) {
@@ -95,6 +104,7 @@ int main() {
             printf("Opcao invalida. Tente novamente.\n");
             pausar();
         }
+
     } while (opcao != 0);
 
     return 0;
